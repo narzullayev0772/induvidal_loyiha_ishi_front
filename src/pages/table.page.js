@@ -5,13 +5,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { MdDelete, MdLoop } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import AxiosContext from "../contexts/axios.context";
 import DialogContext from "../contexts/dialog.context";
 import Mydialog from "../components/mydialog";
 import { SnackbarContext } from "../contexts/snackbar.context";
+import UpdateUser from "../components/update";
 
 export default function UsersTable() {
   const { openDialog, closeDialog } = useContext(DialogContext);
@@ -37,9 +38,9 @@ export default function UsersTable() {
             <TableCell align="right">Delete</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {rows?.length > 0 ? (
-            rows.map((row, index) => (
+        {rows?.length > 0 && (
+          <TableBody>
+            {rows.map((row, index) => (
               <TableRow
                 key={index}
                 sx={{
@@ -72,7 +73,12 @@ export default function UsersTable() {
                     {row.role}
                   </Typography>
                 </TableCell>
-                <TableCell align="right">
+                <TableCell
+                  align="right"
+                  onClick={() => {
+                    openDialog(<UpdateUser user={row} />);
+                  }}
+                >
                   <IconButton variant="contained" color="warning" size="small">
                     <MdLoop />
                   </IconButton>
@@ -112,17 +118,9 @@ export default function UsersTable() {
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <Typography
-              sx={{
-                padding: "5px",
-              }}
-            >
-              Mavjud Emas
-            </Typography>
-          )}
-        </TableBody>
+            ))}
+          </TableBody>
+        )}
       </Table>
     </TableContainer>
   );
