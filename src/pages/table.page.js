@@ -118,7 +118,7 @@ export default function UsersTable() {
                             onYes={async () => {
                               try {
                                 await Request(
-                                  `/all/users/${row._id}`,
+                                  `/api/users/${row._id}`,
                                   "DELETE"
                                 );
                                 setReload((prev) => prev + 1);

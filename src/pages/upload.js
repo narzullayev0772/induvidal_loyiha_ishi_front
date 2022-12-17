@@ -36,7 +36,7 @@ const Upload = () => {
       component={"form"}
       onSubmit={async (e) => {
         e.preventDefault();
-        const res = await Request("/api/posts", "POST", {
+        const res = await Request(`/api/posts/${user._id}`, "POST", {
           title: text,
           content: file_link,
           user,

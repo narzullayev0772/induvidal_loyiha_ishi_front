@@ -20,16 +20,18 @@ import { MdMoreVert, MdOutlineComment } from "react-icons/md";
 import Comments from "./comments";
 import AxiosContext from "../contexts/axios.context";
 
-export default function RecipeReviewCard({ post, disabled }) {
+export default function RecipeReviewCard({ post, disabled, setReload }) {
   const me = JSON.parse(localStorage.getItem("user"));
   const likedByMe = post.likes?.find((like) => like._id === me?._id);
   const [liked, setLiked] = useState(likedByMe ? true : false);
-  const { openDialog } = useContext(DialogContext);
+  const { openDialog, closeDialog } = useContext(DialogContext);
   const [whiteSpace, setWhiteSpace] = useState("nowrap");
   const { Request } = useContext(AxiosContext);
 
-  const deletePost = async (post_id) => {
-    await Request(`/api/posts/${post_id}`, "DELETE");
+  const deletePost = async () => {
+    await Request(`/api/posts/${me._id}/${post._id}`, "DELETE");
+    closeDialog();
+    setReload((prev) => prev++);
   };
   return (
     <Card sx={{ maxWidth: 450, width: "100%" }}>
@@ -45,6 +47,7 @@ export default function RecipeReviewCard({ post, disabled }) {
 
         action={
           <IconButton
+            disabled={disabled}
             onClick={() => {
               openDialog(
                 <List>
@@ -53,7 +56,7 @@ export default function RecipeReviewCard({ post, disabled }) {
                   </ListItemButton>
 
                   {post.user._id === me._id && (
-                    <ListItemButton onclick={deletePost}>
+                    <ListItemButton onClick={deletePost}>
                       <Typography color={"error"}>Delete</Typography>
                     </ListItemButton>
                   )}
@@ -102,9 +105,11 @@ export default function RecipeReviewCard({ post, disabled }) {
       <CardActions disableSpacing>
         <IconButton
           aria-label="add to favorites"
-          disabled={me.role === "guest"}
+          disabled={disabled}
           onClick={() => {
-            if (me.role === "guest") return alert("Please login to comment");
+            if (me.role === "guest") {
+              return (window.location.href = "/register");
+            }
             setLiked(!liked);
             Request(`/api/likes/${post._id}`, "POST", { liked: !liked });
           }}
@@ -113,9 +118,11 @@ export default function RecipeReviewCard({ post, disabled }) {
         </IconButton>
         <IconButton
           aria-label="go to comments"
-          disabled={me.role === "guest"}
+          disabled={disabled}
           onClick={() => {
-            if (me.role === "guest") return alert("Please login to comment");
+            if (me.role === "guest") {
+              return (window.location.href = "/register");
+            }
             openDialog(
               <Comments
                 comments={post.comments}

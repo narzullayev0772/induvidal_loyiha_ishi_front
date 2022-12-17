@@ -6,6 +6,7 @@ import AxiosContext from "../contexts/axios.context";
 const Posts = () => {
   const { Request } = useContext(AxiosContext);
   const [posts, setPosts] = useState([]);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -13,7 +14,7 @@ const Posts = () => {
       setPosts(res.data.data);
     };
     getPosts();
-  }, []);
+  }, [reload]);
 
   return (
     <Box
@@ -25,7 +26,7 @@ const Posts = () => {
       }}
     >
       {posts.map((post, index) => (
-        <RecipeReviewCard key={index} post={post} />
+        <RecipeReviewCard key={index} post={post} setReload={setReload} />
       ))}
     </Box>
   );
