@@ -146,6 +146,7 @@ export default function RecipeReviewCard({ post, disabled, setReload }) {
                   comments={post.comments}
                   post_id={post._id}
                   user_id={post.user._id}
+                  setComments={setComments}
                 />
               );
             }}

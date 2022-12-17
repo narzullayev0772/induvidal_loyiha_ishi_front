@@ -3,10 +3,10 @@ import { useContext, useState } from "react";
 import { MdSend } from "react-icons/md";
 import AxiosContext from "../contexts/axios.context";
 
-const Comments = ({ comments, post_id, user_id }) => {
+const Comments = ({ comments, post_id, user_id, setComments }) => {
   const { Request } = useContext(AxiosContext);
   const [comment, setComment] = useState("");
-  const [_comments, setComments] = useState(comments);
+  const [_comments, _setComments] = useState(comments);
   return (
     <Box
       sx={{
@@ -23,7 +23,8 @@ const Comments = ({ comments, post_id, user_id }) => {
         });
         if (res.status === 201) {
           e.target.reset();
-          setComments([..._comments, res.data.data]);
+          _setComments([..._comments, res.data.data]);
+          setComments((prev) => prev + 1);
         }
       }}
     >
