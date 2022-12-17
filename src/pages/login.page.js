@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/auth.context";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);
@@ -38,7 +39,12 @@ const LoginPage = () => {
         }}
       >
         <Typography variant="h5">Login</Typography>
-        <TextField label="Login" variant="outlined" size="small" name="username" />
+        <TextField
+          label="Login"
+          variant="outlined"
+          size="small"
+          name="username"
+        />
         <TextField
           label="Password"
           variant="outlined"
@@ -48,6 +54,15 @@ const LoginPage = () => {
         <Button variant="contained" type="submit">
           Login
         </Button>
+        <Link
+          to={"/register"}
+          style={{
+            color: "#0088cc",
+            textAlign: "center",
+          }}
+        >
+          Go SignUp
+        </Link>
       </Box>
     </Container>
   );

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -9,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import { MdClose, MdMenu, MdWbSunny } from "react-icons/md";
+import { MdClose, MdMenu } from "react-icons/md";
 import {
   Alert,
   List,
@@ -25,6 +24,7 @@ import MyDialog from "../components/dialog";
 import { SnackbarContext } from "../contexts/snackbar.context";
 import category from "../links";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { useContext, useState } from "react";
 
 const drawerWidth = 240;
 
@@ -73,13 +73,13 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent({ child, setThemeMode, themeMode }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const { snackbarOpen, snackbarComponent, handleSnackbarClose } =
-    React.useContext(SnackbarContext);
+    useContext(SnackbarContext);
   const role = JSON.parse(localStorage.getItem("user")).role;
   return (
     <>
@@ -217,7 +217,7 @@ function DashboardContent({ child, setThemeMode, themeMode }) {
 }
 
 export default function Dashboard({ child }) {
-  const [themeMode, setThemeMode] = React.useState("dark");
+  const [themeMode, setThemeMode] = useState("dark");
   const theme = createTheme({
     palette: {
       mode: themeMode,

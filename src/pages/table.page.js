@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { FullCardContext } from "../contexts/fullcard.context";
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
-import { MdDelete, MdPersonAdd } from "react-icons/md";
+import { MdDelete, MdLoop, MdPersonAdd } from "react-icons/md";
 import AddUser from "../components/addUser";
 import { useContext, useEffect, useState } from "react";
 import AxiosContext from "../contexts/axios.context";
@@ -25,7 +25,7 @@ export default function UsersTable() {
   const [reload, setReload] = useState(0);
   useEffect(() => {
     Request("/api/users", "GET").then((res) => {
-      setRows(res.data);
+      setRows(res.data.data);
     });
   }, [reload]);
 
@@ -45,26 +45,22 @@ export default function UsersTable() {
             setFullCardComponent(<AddUser setReload={setReload} />);
           }}
         >
-          Investor Qo'shish
+          Add User
         </Button>
       </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
-            <TableRow
-              sx={{
-                backgroundColor: "#ccc",
-              }}
-            >
-              <TableCell>Investorlar</TableCell>
-              <TableCell align="right">Investitsiyalar</TableCell>
-              <TableCell align="right">Telegram</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">O'chirish</TableCell>
+            <TableRow>
+              <TableCell>Users</TableCell>
+              <TableCell align="right">Posts count</TableCell>
+              <TableCell align="right">Role</TableCell>
+              <TableCell align="right">Update</TableCell>
+              <TableCell align="right">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.length > 0 &&
+            {rows?.length > 0 &&
               rows.map((row, index) => (
                 <TableRow
                   key={index}
@@ -84,29 +80,31 @@ export default function UsersTable() {
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="caption">
-                      Jami({row.investitsiyalar.length}) :
+                      {row.posts.length}
                     </Typography>
-                    <Tooltip title="Ko'rish">
-                      <IconButton
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                          openDialog(
-                            <Invests
-                              investor={row}
-                              closeDialog={closeDialog}
-                              setReload={setReload}
-                            />,
-                            true
-                          );
-                        }}
-                      >
-                        💲
-                      </IconButton>
-                    </Tooltip>
                   </TableCell>
 
-                  <TableCell align="right"></TableCell>
+                  <TableCell align="right">
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        padding: "2px 10px",
+                        border: "1px solid orange",
+                        borderRadius: "15px",
+                      }}
+                    >
+                      {row.role}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      variant="contained"
+                      color="warning"
+                      size="small"
+                    >
+                      <MdLoop />
+                    </IconButton>
+                  </TableCell>
                   <TableCell align="right">
                     <IconButton
                       variant="contained"

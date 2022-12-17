@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import AxiosContext from "../contexts/axios.context";
 import { FullCardContext } from "../contexts/fullcard.context";
@@ -25,12 +25,11 @@ const AddUser = ({ setReload }) => {
           setFullCard(false);
           setReload(Date.now());
           handleSnackbarOpen({
-            message: "Investor qo'shildi",
+            message: "Qo'shildi",
             severity: "success",
           });
         }}
       >
-        <Typography variant="h5">Investor Qo'shish</Typography>
         <TextField
           label="Ismi"
           variant="outlined"

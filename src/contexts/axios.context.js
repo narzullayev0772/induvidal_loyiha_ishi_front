@@ -1,12 +1,14 @@
 import axios from "axios";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 const AxiosContext = createContext();
 
 export default AxiosContext;
 
 export const AxiosProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const Request = async (url, method, data) => {
+    setLoading(true);
     try {
       const res = await axios({
         url: process.env.REACT_APP_API + url,
@@ -16,6 +18,7 @@ export const AxiosProvider = ({ children }) => {
           Authorization: `${localStorage.getItem("token")}`,
         },
       });
+      setLoading(false);
       return res;
     } catch (error) {
       return error;
@@ -26,6 +29,7 @@ export const AxiosProvider = ({ children }) => {
     <AxiosContext.Provider
       value={{
         Request,
+        loading,
       }}
     >
       {children}
