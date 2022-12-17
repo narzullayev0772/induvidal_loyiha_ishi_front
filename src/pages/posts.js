@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import RecipeReviewCard from "../components/post";
 import AxiosContext from "../contexts/axios.context";
@@ -25,9 +25,13 @@ const Posts = () => {
         alignItems: "center",
       }}
     >
-      {posts.map((post, index) => (
-        <RecipeReviewCard key={index} post={post} setReload={setReload} />
-      ))}
+      {posts.length > 0 ? (
+        posts.map((post, index) => (
+          <RecipeReviewCard key={index} post={post} setReload={setReload} />
+        ))
+      ) : (
+        <Typography>Post hozircha mavjud emas</Typography>
+      )}
     </Box>
   );
 };

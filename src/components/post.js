@@ -5,13 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import {
-  CardActions,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-} from "@mui/material";
+import { CardActions, IconButton, List, ListItemButton } from "@mui/material";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { useContext, useState } from "react";
 import DialogContext from "../contexts/dialog.context";
@@ -19,6 +13,7 @@ import moment from "moment/moment";
 import { MdMoreVert, MdOutlineComment } from "react-icons/md";
 import Comments from "./comments";
 import AxiosContext from "../contexts/axios.context";
+import { Box } from "@mui/system";
 
 export default function RecipeReviewCard({ post, disabled, setReload }) {
   const me = JSON.parse(localStorage.getItem("user"));
@@ -27,6 +22,8 @@ export default function RecipeReviewCard({ post, disabled, setReload }) {
   const { openDialog, closeDialog } = useContext(DialogContext);
   const [whiteSpace, setWhiteSpace] = useState("nowrap");
   const { Request } = useContext(AxiosContext);
+  const [likes, setLikes] = useState(post.likes?.length);
+  const [comments, setComments] = useState(post.comments?.length);
 
   const deletePost = async () => {
     await Request(`/api/posts/${me._id}/${post._id}`, "DELETE");
@@ -103,37 +100,60 @@ export default function RecipeReviewCard({ post, disabled, setReload }) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton
-          aria-label="add to favorites"
-          disabled={disabled}
-          onClick={() => {
-            if (me.role === "guest") {
-              return (window.location.href = "/register");
-            }
-            setLiked(!liked);
-            Request(`/api/likes/${post._id}`, "POST", { liked: !liked });
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          {liked ? <HiHeart color="tomato" /> : <HiOutlineHeart />}
-        </IconButton>
-        <IconButton
-          aria-label="go to comments"
-          disabled={disabled}
-          onClick={() => {
-            if (me.role === "guest") {
-              return (window.location.href = "/register");
-            }
-            openDialog(
-              <Comments
-                comments={post.comments}
-                post_id={post._id}
-                user_id={post.user._id}
-              />
-            );
+          <IconButton
+            aria-label="add to favorites"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+            disabled={disabled}
+            onClick={() => {
+              if (me.role === "guest") {
+                return (window.location.href = "/register");
+              }
+              setLiked(!liked);
+              setLikes((prev) => (liked ? prev - 1 : prev + 1));
+              Request(`/api/likes/${post._id}`, "POST", { liked: !liked });
+            }}
+          >
+            {liked ? <HiHeart color="tomato" /> : <HiOutlineHeart />}
+          </IconButton>
+          <Typography>{likes}</Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <MdOutlineComment />
-        </IconButton>
+          <IconButton
+            aria-label="go to comments"
+            disabled={disabled}
+            onClick={() => {
+              if (me.role === "guest") {
+                return (window.location.href = "/register");
+              }
+              openDialog(
+                <Comments
+                  comments={post.comments}
+                  post_id={post._id}
+                  user_id={post.user._id}
+                />
+              );
+            }}
+          >
+            <MdOutlineComment />
+          </IconButton>
+          <Typography>{comments}</Typography>
+        </Box>
       </CardActions>
     </Card>
   );

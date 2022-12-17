@@ -38,7 +38,7 @@ export default function UsersTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.length > 0 &&
+          {rows?.length > 0 ? (
             rows.map((row, index) => (
               <TableRow
                 key={index}
@@ -112,7 +112,16 @@ export default function UsersTable() {
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ))}
+            ))
+          ) : (
+            <Typography
+              sx={{
+                padding: "5px",
+              }}
+            >
+              Mavjud Emas
+            </Typography>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

@@ -25,6 +25,7 @@ import { SnackbarContext } from "../contexts/snackbar.context";
 import category from "../links";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { useContext, useState } from "react";
+import AccountMenu from "../components/account";
 
 const drawerWidth = 240;
 
@@ -80,7 +81,7 @@ function DashboardContent({ child, setThemeMode, themeMode }) {
 
   const { snackbarOpen, snackbarComponent, handleSnackbarClose } =
     useContext(SnackbarContext);
-  const role = JSON.parse(localStorage.getItem("user")).role;
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -127,6 +128,7 @@ function DashboardContent({ child, setThemeMode, themeMode }) {
                 <HiSun style={{ color: "#f0c14b" }} />
               )}
             </IconButton>
+            <AccountMenu user={user} />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -142,11 +144,10 @@ function DashboardContent({ child, setThemeMode, themeMode }) {
             </IconButton>
           </Toolbar>
           <Divider />
-
           <List>
             {category.map((e, index) => {
               return (
-                e.can__see.includes(role) && (
+                e.can__see.includes(user.role) && (
                   <Tooltip title={e.name} key={index} placement="right-end">
                     <Link
                       to={e.link}
