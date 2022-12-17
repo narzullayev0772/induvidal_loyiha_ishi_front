@@ -5,12 +5,18 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import { CardActions, IconButton } from "@mui/material";
+import {
+  CardActions,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+} from "@mui/material";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { useContext, useState } from "react";
 import DialogContext from "../contexts/dialog.context";
 import moment from "moment/moment";
-import { MdOutlineComment } from "react-icons/md";
+import { MdMoreVert, MdOutlineComment } from "react-icons/md";
 import Comments from "./comments";
 import AxiosContext from "../contexts/axios.context";
 
@@ -21,6 +27,10 @@ export default function RecipeReviewCard({ post, disabled }) {
   const { openDialog } = useContext(DialogContext);
   const [whiteSpace, setWhiteSpace] = useState("nowrap");
   const { Request } = useContext(AxiosContext);
+
+  const deletePost = async (post_id) => {
+    await Request(`/api/posts/${post_id}`, "DELETE");
+  };
   return (
     <Card sx={{ maxWidth: 450, width: "100%" }}>
       <CardHeader
@@ -31,6 +41,26 @@ export default function RecipeReviewCard({ post, disabled }) {
         }
         title={post.user?.name}
         subheader={moment(post.createdAt).fromNow()}
+        // setting icon
+
+        action={
+          <IconButton
+            onClick={() => {
+              openDialog(
+                <List>
+                  <ListItemButton>
+                    <Typography>Share</Typography>
+                  </ListItemButton>
+                  <ListItemButton onclick={deletePost}>
+                    <Typography color={"error"}>Delete</Typography>
+                  </ListItemButton>
+                </List>
+              );
+            }}
+          >
+            <MdMoreVert />
+          </IconButton>
+        }
       />
       {post.content && (
         <CardMedia
