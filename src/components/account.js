@@ -32,7 +32,9 @@ export default function AccountMenu({ user }) {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>{user.name[0]}</Avatar>
+          <Avatar sx={{ width: 32, height: 32 }}>
+            {user.role === "guest" ? "G" : user.name[0]}
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -71,7 +73,7 @@ export default function AccountMenu({ user }) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem>
-          <Avatar /> {user.name}
+          <Avatar /> {user.role === "guest" ? "GUEST" : user.name}
         </MenuItem>
         <Divider />
 
