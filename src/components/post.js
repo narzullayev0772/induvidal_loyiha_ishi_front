@@ -51,9 +51,12 @@ export default function RecipeReviewCard({ post, disabled }) {
                   <ListItemButton>
                     <Typography>Share</Typography>
                   </ListItemButton>
-                  <ListItemButton onclick={deletePost}>
-                    <Typography color={"error"}>Delete</Typography>
-                  </ListItemButton>
+
+                  {post.user._id === me._id && (
+                    <ListItemButton onclick={deletePost}>
+                      <Typography color={"error"}>Delete</Typography>
+                    </ListItemButton>
+                  )}
                 </List>
               );
             }}
